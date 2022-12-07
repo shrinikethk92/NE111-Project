@@ -35,14 +35,12 @@ asteroidImg = pygame.transform.scale(
     asteroidImg, (40, 40))  # resize asteroid img
 shipImg = pygame.transform.scale(shipImg, (30, 30))  # resize ship img - S
 
-
-
 class cb:  # creates class of asteroid - S
     def __init__(self, height):  # initialize asteroid - S
         """
         Creates a function of asteroid which can be called later to create multiple instances.
         Args:
-            height (_type_): 
+            height: 
         """
         self.cbx = 800  # starts at 800 x - K
         self.cby = random.randrange(0, height)  # random y value to start - K
@@ -89,17 +87,23 @@ while not gameover: #while game is running - K
     # spawns asteroid every 30 frames (60 fps so spawns 1 every 0.5s) - K
     if counter % 30 == 0:
         asteroid = cb(height)
-        
         array.append(asteroid) # appends each spawned asteroid into the empty array - S
     #    print('lol') -> testing - S
 
     if array:
-        if array[0].cbx <= 0:  # if object goes out of bounds - S
-            del array[0]
-    #        array.pop(0)  # removed from the array (testing) - S
-            # score is added (may not work fully because asteroids may be too fast for array to update depending on PC performance) - S
-            score = score + 1 
-            print (score) # -> testing - S
+        arrayToRemove = [] #empty array for now - S
+        for i in range(len(array)):
+            if array[i].cbx <= 0:  # if object goes out of bounds - S
+                arrayToRemove.append(i) # appends(moves) the element of the array into the new empty array
+                # score is added (may not work fully because asteroids may be too fast for array to update depending on PC performance - S
+                score = score + 1 # adds one to the score (to increase speed) - S
+            #    print (score) # -> testing - S
+
+        for i in arrayToRemove: # for loop for new array - S
+            array.pop(i) # deletes the element in the array - S
+            '''
+            This section of code looks a lot different from the video because we only noticed the bug with the array after recording the video, but creating a new array also gets rid of the issue where asteroids moved too fast for the array to update. It also fixed the issue of elements not getting removed as occasionally, an element that was not the first in the array would reach the other side faster then the first element of the array, so it would not delete. - S
+            '''
 
     for i in range(len(array)):
         ast = array[i]  # assigns element i to ast - S
@@ -113,7 +117,7 @@ while not gameover: #while game is running - K
         # recta.blit(asteroidImg, (0,0)) (ignore - S)
 
         if playerx + 7.5 > ast.cbx - (ast.cballwidth/2) and playery + 7.5 > ast.cby - (ast.cballheight/2) and playery - 7.5 < ast.cby + (ast.cballheight/2):
-          gameover = True  # collision detection for asteroids - K
+           gameover = True  # collision detection for asteroids - K
 
     # print('new frame') -> testing - S
     # print (len(array))  #-> testing - S
